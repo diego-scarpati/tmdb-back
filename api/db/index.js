@@ -5,10 +5,10 @@ const { DATABASE_URL, USER, PASSWORD } = process.env;
 const db = new Sequelize(DATABASE_URL, {
   logging: false,
   native: false,
-  dialect: "postgres",
-  ssl: {
-    require: true,
-    rejectUnauthorized: false,
+  dialectOptions: {
+    ssl: {
+      rejectUnauthorized: false, // averiguar
+    },
   },
 });
 
