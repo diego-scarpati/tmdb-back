@@ -1,8 +1,8 @@
 require("dotenv").config();
 const { Sequelize } = require("sequelize");
-const { DATABASE_URL } = process.env;
+const { DATABASE_URL, USER, PASSWORD } = process.env;
 
-const db = new Sequelize(DATABASE_URL, null, null, {
+const db = new Sequelize(DATABASE_URL, USER, PASSWORD, {
   logging: false,
   native: false,
   dialect: "postgres",
