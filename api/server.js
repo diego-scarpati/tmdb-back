@@ -12,25 +12,33 @@ const { CORS_URL } = process.env;
 
 const cookieParser = require("cookie-parser");
 
-app.use(cors());
+const corsOptions = {
+  origin: ["http://localhost:3000", "https://"],
+  credentials: true,
+};
+
 app.use(morgan("dev"));
 app.use(express.json());
+app.use(cors(corsOptions));
 app.use(cookieParser());
-app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Credentials", true);
-  res.header("Access-Control-Allow-Methods", "POST, GET, PUT, DELETE, OPTIONS");
-  res.header("Access-Control-Allow-Headers", "Content-Type");
-});
+// app.use((req, res, next) => {
+//   res.header("Access-Control-Allow-Origin", "*");
+//   res.header("Access-Control-Allow-Credentials", true);
+//   res.header("Access-Control-Allow-Methods", "POST, GET, PUT, DELETE, OPTIONS");
+//   res.header("Access-Control-Allow-Headers", "Content-Type");
+// });
 
 app.use("/api", routes);
 
-const { PORT } = process.env;
+const { PORT } = process.env || 5000;
 
-db.sync({ force: false })
-  .then(() =>
+(async () => {
+  try {
+    await db.sync({ force: false });
     app.listen(PORT, () => {
       console.log(`Listening on Port: ${PORT}`);
-    })
-  )
-  .catch((error) => console.log("Sync Error:", error));
+    });
+  } catch (error) {
+    console.error("Unable to connect:", error.message);
+  }
+})();
